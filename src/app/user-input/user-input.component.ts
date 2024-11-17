@@ -1,6 +1,6 @@
 import { Component, EventEmitter, output, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { InvestmentInput } from '../investment-input.model';
+import { InvestmentService } from '../investment.service';
 
 @Component({
   selector: 'app-user-input',
@@ -11,29 +11,30 @@ import { InvestmentInput } from '../investment-input.model';
 })
 export class UserInputComponent {
   //////////////////////////////// with signals
-    calculate = output<InvestmentInput>();
-    enteredInitialInvestment = signal('0');
-    enteredAnnualInvestment = signal('0');
-    enteredExpectedReturn = signal('5');
-    enteredDuration = signal('10');
+  enteredInitialInvestment = signal('0');
+  enteredAnnualInvestment = signal('0');
+  enteredExpectedReturn = signal('5');
+  enteredDuration = signal('10');
 
   //////////////////////////////// without signals
-    // @Output() calculate = new EventEmitter<InvestmentInput>();
-    // enteredInitialInvestment = '0';
-    // enteredAnnualInvestment = '0';
-    // enteredExpectedReturn = '5';
-    // enteredDuration = '10';
+  // @Output() calculate = new EventEmitter<InvestmentInput>();
+  // enteredInitialInvestment = '0';
+  // enteredAnnualInvestment = '0';
+  // enteredExpectedReturn = '5';
+  // enteredDuration = '10';
 
-  onSubmit(){
-  //////////////////////////////// with signals
-    this.calculate.emit({
+  constructor(private investmentService: InvestmentService) {}
+
+  onSubmit() {
+    //////////////////////////////// with signals
+    this.investmentService.calculateInvestmentResults({
       initialInvestment: +this.enteredInitialInvestment(),
       duration: +this.enteredDuration(),
       expectedReturn: +this.enteredExpectedReturn(),
       annualInvestment: +this.enteredAnnualInvestment(),
     });
 
-  //////////////////////////////// without signals
+    //////////////////////////////// without signals
     // this.calculate.emit({
     //   initialInvestment: +this.enteredInitialInvestment,
     //   duration: +this.enteredDuration,
@@ -41,7 +42,7 @@ export class UserInputComponent {
     //   annualInvestment: +this.enteredAnnualInvestment,
     // });
 
-  //////////////////////////////// reset inputs
+    //////////////////////////////// reset inputs
     this.enteredInitialInvestment.set('0');
     this.enteredAnnualInvestment.set('0');
     this.enteredExpectedReturn.set('0');
